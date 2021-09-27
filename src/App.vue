@@ -40,6 +40,12 @@ function findPrimes(n) {
   return primes;
 }
 
+function asyncFindPrimes(n) {
+  return new Promise((resolve) => {
+    resolve(findPrimes(n))
+  })
+}
+
 export default {
   name: 'App',
   data() {
@@ -53,8 +59,8 @@ export default {
       const num = Number.parseInt(this.n, 10) || 0;
       this.ans = [];
 
-      this.$nextTick(() => {
-        this.ans = findPrimes(num);
+      this.$nextTick(async () => {
+        this.ans = await asyncFindPrimes(num);
       });
     }
   }
