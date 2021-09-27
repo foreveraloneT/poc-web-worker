@@ -65,17 +65,23 @@ export default {
     }
   },
   methods: {
+    // asyncFindPrimes(n) {
+    //   if (!this.worker) return findPrimes(n);
+
+
+    //   return new Promise((resolve) => {
+    //     this.worker.onmessage = (event) => {
+    //       resolve(event.data);
+    //     }
+
+    //     this.worker.postMessage(n);
+    //   });
+    // },
     asyncFindPrimes(n) {
       if (!this.worker) return findPrimes(n);
 
 
-      return new Promise((resolve) => {
-        this.worker.onmessage = (event) => {
-          resolve(event.data);
-        }
-
-        this.worker.postMessage(n);
-      });
+      return this.worker.findPrimes(n);
     },
     findMaxPrime() {
       const num = Number.parseInt(this.n, 10) || 0;
@@ -83,6 +89,9 @@ export default {
 
       this.$nextTick(async () => {
         this.ans = await this.asyncFindPrimes(num);
+
+        const isOnePrime = await this.worker.isPrime(1);
+        console.log('1 is prime ? ', isOnePrime);
       });
     }
   }

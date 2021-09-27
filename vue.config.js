@@ -4,7 +4,7 @@ module.exports = {
       rules: [
         {
           test: /\.worker\.js$/,
-          loader: "worker-loader",
+          loader: "comlink-loader",
         },
       ]
     }
