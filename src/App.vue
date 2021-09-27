@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import PrimeWorker from '@/workers/prime.worker';
+
 function isPrime(n) {
   if (n === 1) return true;
 
@@ -59,7 +61,7 @@ export default {
     if (window.Worker) {
       console.log('support worker');
 
-      this.worker = new Worker('/worker.js');
+      this.worker = new PrimeWorker();
     }
   },
   methods: {

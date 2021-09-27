@@ -1,12 +1,4 @@
-function isPrime(n) {
-  if (n === 1) return true;
-
-  for (let i = 2; i < n; i++) {
-    if (n % i === 0) return false;
-  }
-
-  return true;
-}
+import isPrime from 'is-prime-number';
 
 function findPrimes(n) {
   const primes = [];
@@ -18,7 +10,7 @@ function findPrimes(n) {
   return primes;
 }
 
-onmessage = (event) => {
+self.onmessage = (event) => {
   const num = event.data;
 
   console.log('worker: receive: ', num)
@@ -27,5 +19,5 @@ onmessage = (event) => {
 
   console.log('success');
 
-  postMessage(primes);
+  self.postMessage(primes);
 }
