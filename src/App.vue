@@ -40,11 +40,11 @@ function findPrimes(n) {
   return primes;
 }
 
-function asyncFindPrimes(n) {
-  return new Promise((resolve) => {
-    resolve(findPrimes(n))
-  })
-}
+// function asyncFindPrimes(n) {
+//   return new Promise((resolve) => {
+//     resolve(findPrimes(n))
+//   })
+// }
 
 export default {
   name: 'App',
@@ -52,15 +52,35 @@ export default {
     return {
       n: '',
       ans: [],
+      worker: null,
+    }
+  },
+  created() {
+    if (window.Worker) {
+      console.log('support worker');
+
+      this.worker = new Worker('/worker.js');
     }
   },
   methods: {
+    asyncFindPrimes(n) {
+      if (!this.worker) return findPrimes(n);
+
+
+      return new Promise((resolve) => {
+        this.worker.onmessage = (event) => {
+          resolve(event.data);
+        }
+
+        this.worker.postMessage(n);
+      });
+    },
     findMaxPrime() {
       const num = Number.parseInt(this.n, 10) || 0;
       this.ans = [];
 
       this.$nextTick(async () => {
-        this.ans = await asyncFindPrimes(num);
+        this.ans = await this.asyncFindPrimes(num);
       });
     }
   }
